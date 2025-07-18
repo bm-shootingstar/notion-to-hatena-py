@@ -1,0 +1,56 @@
+/* Notion風コールアウトのスタイル (特異性強化版) */
+.entry-content .callout {
+    display: flex;
+    align-items: flex-start;
+    padding: 16px;
+    margin: 1.5em 0;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    line-height: 1.6;
+}
+
+.entry-content .callout-icon {
+    margin-right: 12px;
+    font-size: 1.4em;
+    line-height: 1;
+}
+
+.entry-content .callout-content {
+    flex: 1;
+}
+
+.entry-content .callout-content p {
+    margin: 0;
+}
+
+/* --- スタイル種別 --- */
+
+/* デフォルト (灰色) */
+.entry-content .callout.callout-default {
+    background-color: #f7f7f7;
+    border-left: 5px solid #999;
+}
+
+/* 情報 (青色) */
+.entry-content .callout.callout-info {
+    background-color: #e6f7ff;
+    border-left: 5px solid #1890ff;
+}
+
+/* 警告 (黄色) */
+.entry-content .callout.callout-warning {
+    background-color: #fffbe6;
+    border-left: 5px solid #faad14;
+}
+
+/* 危険 (赤色) */
+.entry-content .callout.callout-danger {
+    background-color: #fff1f0;
+    border-left: 5px solid #f5222d;
+}
+
+/* 成功 (緑色) */
+.entry-content .callout.callout-success {
+    background-color: #f6ffed;
+    border-left: 5px solid #52c41a;
+}
