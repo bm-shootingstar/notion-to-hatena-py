@@ -12,7 +12,7 @@ Notion のドキュメントをはてなブログに投稿するための python
 - 基本的な Notion ブロック（見出し、段落、リスト、コードなど）を Markdown に変換
 - はてなブログの AtomPub API を利用して記事を投稿
 - API キーなどの機密情報を `.env` ファイルで安全に管理
-- Notionのコールアウトをはてなブログ上で再現（要CSS設定）
+- Notion のコールアウトをはてなブログ上で再現（要 CSS 設定）
 
 ## 必要なもの
 
@@ -24,7 +24,7 @@ Notion のドキュメントをはてなブログに投稿するための python
 1.  **リポジトリをクローンします**
 
     ```bash
-    git clone https://github.com/your-username/notion_to_hatena.git
+    git clone https://github.com/bm-shootingstar/notion-to-hatena-py.git
     cd notion_to_hatena
     ```
 
@@ -74,11 +74,11 @@ Notion のドキュメントをはてなブログに投稿するための python
     - `HATENA_USER_ID`: あなたのはてな ID。
     - `HATENA_BLOG_ID`: あなたのはてなブログのドメイン名 (例: `example.hatenablog.com`)。
 
-4.  **（任意）コールアウト機能のためのCSSを設定します**
+4.  **（任意）コールアウト機能のための CSS を設定します**
 
-    Notionのコールアウト機能を使用する場合、はてなブログのデザインCSSにスタイルを追加する必要があります。
+    Notion のコールアウト機能を使用する場合、はてなブログのデザイン CSS にスタイルを追加する必要があります。
 
-    `documents/hatena_design_css.css` の内容を、はてなブログの **「デザイン」>「カスタマイズ」（レンチのアイコン）>「デザインCSS」** に貼り付けてください。
+    `documents/hatena_design_css.css` の内容を、はてなブログの **「デザイン」>「カスタマイズ」（レンチのアイコン）>「デザイン CSS」** に貼り付けてください。
 
     現在、以下の絵文字に対応した色分けが設定されています。
 
@@ -118,9 +118,9 @@ python main.py https://www.notion.so/your-workspace/My-Awesome-Post-a1b2c3d4e5f6
 
 ## ライセンス
 
-このプロジェクトはMITライセンスのもとで公開されています。詳細は `LICENSE` ファイルを参照してください。
+このプロジェクトは MIT ライセンスのもとで公開されています。詳細は `LICENSE` ファイルを参照してください。
 
 ## 今後の予定
 
-- GUI機能の追加
+- GUI 機能の追加
 - スタンドアローンアプリとしてリリース

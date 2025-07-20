@@ -1,5 +1,5 @@
 [project]
-name = "notion-to-hatena"
+name = "notion-to-hatena-py"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
