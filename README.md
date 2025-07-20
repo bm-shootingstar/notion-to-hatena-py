@@ -116,6 +116,10 @@ python main.py https://www.notion.so/your-workspace/My-Awesome-Post-a1b2c3d4e5f6
 
 投稿が成功すると、コンソールに成功メッセージが表示されます。
 
+## ライセンス
+
+このプロジェクトはMITライセンスのもとで公開されています。詳細は `LICENSE` ファイルを参照してください。
+
 ## 今後の予定
 
 - GUI機能の追加

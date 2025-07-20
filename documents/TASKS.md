@@ -33,7 +33,9 @@
   - [x] `README.md` に Notion トークン取得方法を追記
   - [x] `README.md` に公開オプションについて追記
   - [x] `README.md` にコールアウトの絵文字リストを追記
+  - [x] `README.md` にライセンス情報を追記
   - [x] ドキュメントを `documents` フォルダに移動
+  - [x] MITライセンスファイルを追加
 - [x] Linter
   - [x] `ruff` を導入
   - [x] `ruff` のルールに合わせてコードを修正
