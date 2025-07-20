@@ -37,6 +37,8 @@
 - [x] Linter
   - [x] `ruff` を導入
   - [x] `ruff` のルールに合わせてコードを修正
+- [x] その他
+  - [x] `.gitignore` に `.ruff_cache` を追加
 
 ## 今後の予定
 

@@ -53,3 +53,7 @@ python main.py <NOTION_PAGE_ID_OR_URL> --publish
 -   `HATENA_API_KEY`: はてなブログのAPIキー。
 -   `HATENA_USER_ID`: はてなID。
 -   `HATENA_BLOG_ID`: はてなブログのID。
+
+## 6. その他
+
+- `.gitignore` に `.ruff_cache` を追加し、不要なキャッシュファイルがバージョン管理されるのを防ぐ。
