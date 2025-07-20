@@ -119,7 +119,7 @@ wheels = [
 ]
 
 [[package]]
-name = "notion-to-hatena"
+name = "notion-to-hatena-py"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
