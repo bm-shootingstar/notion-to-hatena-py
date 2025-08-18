@@ -1,4 +1,4 @@
-from src.hatena_poster import upload_image_to_hatena_fotolife
+from src.hatena_poster import upload_image_to_hatena_photolife
 
 
 def convert_to_markdown(blocks: list) -> str:
@@ -59,7 +59,7 @@ def convert_to_markdown(blocks: list) -> str:
             markdown_lines.append(f"> {text}")
         elif block_type == "image":
             notion_image_url = block["image"]["file"]["url"]
-            hatena_image_url = upload_image_to_hatena_fotolife(notion_image_url)
+            hatena_image_url = upload_image_to_hatena_photolife(notion_image_url)
             if hatena_image_url:
                 markdown_lines.append(hatena_image_url)
             else:
@@ -82,10 +82,10 @@ def convert_to_markdown(blocks: list) -> str:
             }
             callout_class = emoji_to_class.get(icon_emoji, "callout-default")
 
-            html = f'''<div class="callout {callout_class}">
+            html = f"""<div class="callout {callout_class}">
 <div class="callout-icon">{icon_emoji}</div>
 <div class="callout-content"><p>{text}</p></div>
-</div>'''
+</div>"""
             markdown_lines.append(html)
 
     return "\n\n".join(markdown_lines)

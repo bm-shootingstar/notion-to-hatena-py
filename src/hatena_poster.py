@@ -17,26 +17,21 @@ def _generate_wsse_header(hatena_user_id, hatena_api_key):
     """Generates WSSE authentication header for Hatena API."""
     created = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     b_nonce = hashlib.sha1(os.urandom(16)).digest()
-    b_digest = hashlib.sha1(
-        b_nonce + created.encode("ascii") + hatena_api_key.encode("ascii")
-    ).digest()
+    b_digest = hashlib.sha1(b_nonce + created.encode("ascii") + hatena_api_key.encode("ascii")).digest()
     nonce = base64.b64encode(b_nonce).decode("ascii")
     digest = base64.b64encode(b_digest).decode("ascii")
-    return (
-        f'UsernameToken Username="{hatena_user_id}", '
-        f'PasswordDigest="{digest}", Nonce="{nonce}", Created="{created}"'
-    )
+    return f'UsernameToken Username="{hatena_user_id}", PasswordDigest="{digest}", Nonce="{nonce}", Created="{created}"'
 
 
-def upload_image_to_hatena_fotolife(image_url: str) -> str | None:
+def upload_image_to_hatena_photolife(image_url: str) -> str | None:
     """
-    Uploads an image to Hatena Fotolife and returns the permanent URL.
+    Uploads an image to Hatena Photolife and returns the permanent URL.
 
     Args:
         image_url: The temporary URL of the image from Notion.
 
     Returns:
-        The permanent URL of the uploaded image on Hatena Fotolife, or None on failure.
+        The permanent URL of the uploaded image on Hatena Photolife, or None on failure.
     """
     hatena_user_id = os.environ["HATENA_USER_ID"]
     hatena_api_key = os.environ["HATENA_API_KEY"]
@@ -51,7 +46,7 @@ def upload_image_to_hatena_fotolife(image_url: str) -> str | None:
         return None
 
     url = "https://f.hatena.ne.jp/atom/post"
-    title = "image"  # Title in Hatena Fotolife (can be customized)
+    title = "image"  # Title in Hatena Photolife (can be customized)
     xml_data = f"""<entry xmlns="http://purl.org/atom/ns#">
 <title>{title}</title>
 <content mode="base64" type="{content_type}">{base64.b64encode(image_data).decode()}</content>
@@ -60,9 +55,7 @@ def upload_image_to_hatena_fotolife(image_url: str) -> str | None:
     headers = {"X-WSSE": _generate_wsse_header(hatena_user_id, hatena_api_key)}
 
     try:
-        post_response = requests.post(
-            url, headers=headers, data=xml_data.encode("utf-8")
-        )
+        post_response = requests.post(url, headers=headers, data=xml_data.encode("utf-8"))
         post_response.raise_for_status()
 
         # Register the Hatena namespace to find hatena:syntax
@@ -82,17 +75,17 @@ def upload_image_to_hatena_fotolife(image_url: str) -> str | None:
             if alt_link is not None:
                 return alt_link.get("href")
             else:
-                logger.error("Could not find image URL in Hatena Fotolife response.")
+                logger.error("Could not find image URL in Hatena Photolife response.")
                 logger.error(f"Response: {post_response.text}")
                 return None
 
     except requests.exceptions.RequestException as e:
-        logger.error(f"Failed to upload image to Hatena Fotolife. {e}")
+        logger.error(f"Failed to upload image to Hatena Photolife. {e}")
         if "post_response" in locals():
             logger.error(f"Response: {post_response.text}")
         return None
     except ElementTree.ParseError as e:
-        logger.error(f"Failed to parse Hatena Fotolife XML response. {e}")
+        logger.error(f"Failed to parse Hatena Photolife XML response. {e}")
         return None
 
 
@@ -111,9 +104,7 @@ def post_to_hatena(title: str, content: str, draft: bool = True):
 
     url = f"https://blog.hatena.ne.jp/{hatena_user_id}/{hatena_blog_id}/atom/entry"
 
-    headers = {
-        "Content-Type": "application/xml"
-    }
+    headers = {"Content-Type": "application/xml"}
 
     draft_tag = ""
     if draft:
@@ -128,12 +119,7 @@ def post_to_hatena(title: str, content: str, draft: bool = True):
   {draft_tag}
 </entry>"""
 
-    response = requests.post(
-        url,
-        auth=(hatena_user_id, hatena_api_key),
-        headers=headers,
-        data=data.encode('utf-8')
-    )
+    response = requests.post(url, auth=(hatena_user_id, hatena_api_key), headers=headers, data=data.encode("utf-8"))
 
     if response.status_code == 201:
         status = "draft" if draft else "published"
@@ -142,7 +128,8 @@ def post_to_hatena(title: str, content: str, draft: bool = True):
         logger.error(f"Failed to post to Hatena Blog. Status code: {response.status_code}")
         logger.error(response.text)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Test post
     logging.basicConfig(level=logging.INFO)
     post_to_hatena("Test Title", "# Hello Hatena\n\nThis is a test post.")
