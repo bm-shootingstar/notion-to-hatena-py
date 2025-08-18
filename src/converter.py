@@ -53,7 +53,7 @@ def convert_to_markdown(blocks: list) -> str:
         elif block_type == "code":
             text = block["code"]["rich_text"][0]["plain_text"]
             language = block["code"]["language"]
-            markdown_lines.append(f'```"{language}"\n"{text}"\n```')
+            markdown_lines.append(f'```"{language}"\n{text}\n```')
         elif block_type == "quote":
             text = block["quote"]["rich_text"][0]["plain_text"]
             markdown_lines.append(f"> {text}")
