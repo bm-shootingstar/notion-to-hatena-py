@@ -8,20 +8,29 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
+notion = Client(auth=os.environ["NOTION_API_KEY"])
 
-def fetch_notion_page(page_id: str) -> list:
+
+def fetch_blocks_recursively(block_id: str) -> list:
     """
-    Fetches all blocks from a Notion page.
+    Fetches all blocks from a Notion page recursively.
 
     Args:
-        page_id: The ID of the Notion page.
+        block_id: The ID of the Notion block (or page).
 
     Returns:
-        A list of block objects.
+        A list of block objects with their children.
     """
-    notion = Client(auth=os.environ["NOTION_API_KEY"])
-    response = notion.blocks.children.list(block_id=page_id)
-    return response.get("results", [])
+    blocks = []
+    response = notion.blocks.children.list(block_id=block_id)
+    results = response.get("results", [])
+    blocks.extend(results)
+
+    for block in results:
+        if block.get("has_children"):
+            block["children"] = fetch_blocks_recursively(block["id"])
+
+    return blocks
 
 
 def fetch_page_title(page_id: str) -> str | None:
@@ -34,7 +43,6 @@ def fetch_page_title(page_id: str) -> str | None:
     Returns:
         The title of the page, or None if not found.
     """
-    notion = Client(auth=os.environ["NOTION_API_KEY"])
     try:
         page = notion.pages.retrieve(page_id=page_id)
         properties = page.get("properties")
@@ -48,9 +56,7 @@ def fetch_page_title(page_id: str) -> str | None:
                 if title_list:
                     return title_list[0].get("plain_text")
 
-        logger.error(
-            "Could not find a property of type 'title' in the page properties."
-        )
+        logger.error("Could not find a property of type 'title' in the page properties.")
         return None
 
     except Exception as e:
@@ -70,7 +76,7 @@ if __name__ == "__main__":
             logger.info(f"Title: {title}")
         else:
             logger.warning("Could not fetch title.")
-        blocks = fetch_notion_page(test_page_id)
+        blocks = fetch_blocks_recursively(test_page_id)
         import json
 
         logger.info(json.dumps(blocks, indent=2, ensure_ascii=False))

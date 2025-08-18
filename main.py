@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 
 from src.converter import convert_to_markdown
 from src.hatena_poster import post_to_hatena
-from src.notion_fetcher import fetch_notion_page, fetch_page_title
+from src.notion_fetcher import fetch_blocks_recursively, fetch_page_title
 
 # Configure logging
 logging.basicConfig(
@@ -59,7 +59,7 @@ def main():
 
     logger.info(f"Fetching content from Notion page: {page_id}")
     title = fetch_page_title(page_id)
-    blocks = fetch_notion_page(page_id)
+    blocks = fetch_blocks_recursively(page_id)
 
     if not title or not blocks:
         logger.warning("No content or title found on the page.")
