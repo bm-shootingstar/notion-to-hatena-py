@@ -87,5 +87,31 @@ def convert_to_markdown(blocks: list) -> str:
 <div class="callout-content"><p>{text}</p></div>
 </div>"""
             markdown_lines.append(html)
+        elif block_type == "table":
+            table_rows = block.get("children", [])
+            if not table_rows:
+                continue
+
+            has_header = block.get("table", {}).get("has_column_header", False)
+            html_table = "<table>"
+
+            if has_header:
+                header_row = table_rows[0]
+                html_table += "<thead><tr>"
+                for cell in header_row.get("table_row", {}).get("cells", []):
+                    cell_text = "".join([t.get("plain_text", "") for t in cell])
+                    html_table += f"<th>{cell_text}</th>"
+                html_table += "</tr></thead>"
+                table_rows = table_rows[1:]  # Remove header row
+
+            html_table += "<tbody>"
+            for row in table_rows:
+                html_table += "<tr>"
+                for cell in row.get("table_row", {}).get("cells", []):
+                    cell_text = "".join([t.get("plain_text", "") for t in cell])
+                    html_table += f"<td>{cell_text}</td>"
+                html_table += "</tr>"
+            html_table += "</tbody></table>"
+            markdown_lines.append(html_table)
 
     return "\n\n".join(markdown_lines)

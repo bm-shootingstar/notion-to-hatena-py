@@ -44,6 +44,7 @@ python main.py <NOTION_PAGE_ID_OR_URL> --publish
 -   リンクプレビュー
 -   埋め込み
 -   コールアウト
+-   テーブル
 
 ## 5. 環境変数
 
