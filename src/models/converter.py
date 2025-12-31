@@ -1,4 +1,4 @@
-from src.hatena_poster import upload_image_to_hatena_photolife
+from src.models.hatena_poster import upload_image_to_hatena_photolife
 
 
 def convert_to_markdown(blocks: list) -> str:

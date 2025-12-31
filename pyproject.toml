@@ -8,6 +8,7 @@ dependencies = [
     "notion-client",
     "requests",
     "python-dotenv",
+    "PySide6",
 ]
 
 [project.optional-dependencies]
