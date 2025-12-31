@@ -12,7 +12,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["ruff"]
+dev = [
+    "ruff",
+    "pyinstaller",
+]
 
 [tool.ruff]
 line-length = 120
@@ -23,5 +26,10 @@ select = [
     "F",  # Pyflakes
     "W",  # pycodestyle warnings
     "I",  # isort
+]
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.17.0",
 ]
 

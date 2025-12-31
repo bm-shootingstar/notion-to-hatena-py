@@ -1,14 +1,36 @@
 import logging
 import os
 
-from dotenv import load_dotenv
 from notion_client import Client
 
-load_dotenv()
+from src.utils.env_loader import load_env
+from src.utils.errors import NotionAPIKeyError
+
+load_env()
 
 logger = logging.getLogger(__name__)
 
-notion = Client(auth=os.environ["NOTION_API_KEY"])
+_notion_client_instance = None  # Notionクライアントインスタンスを保持するための変数
+
+
+def _get_notion_client() -> Client:
+    """
+    Notionクライアントインスタンスを取得または初期化する。
+    NOTION_API_KEYがない場合はNotionAPIKeyErrorを発生させる。
+    """
+    global _notion_client_instance
+    if _notion_client_instance is None:
+        notion_api_key = os.environ.get("NOTION_API_KEY")
+        if not notion_api_key:
+            error_message = (
+                "環境変数 'NOTION_API_KEY' が設定されていません。\n"
+                "'.env' ファイルが実行ファイルと同じディレクトリに存在するか、\n"
+                "またはシステム環境変数に 'NOTION_API_KEY' が設定されていることを確認してください。"
+            )
+            logger.error(error_message)
+            raise NotionAPIKeyError(error_message)
+        _notion_client_instance = Client(auth=notion_api_key)
+    return _notion_client_instance
 
 
 def fetch_blocks_recursively(block_id: str) -> list:
@@ -21,6 +43,7 @@ def fetch_blocks_recursively(block_id: str) -> list:
     Returns:
         A list of block objects with their children.
     """
+    notion = _get_notion_client()  # ここでクライアントを取得し、必要であればNotionAPIKeyErrorをraise
     blocks = []
     response = notion.blocks.children.list(block_id=block_id)
     results = response.get("results", [])
@@ -43,6 +66,7 @@ def fetch_page_title(page_id: str) -> str | None:
     Returns:
         The title of the page, or None if not found.
     """
+    notion = _get_notion_client()  # ここでクライアントを取得し、必要であればNotionAPIKeyErrorをraise
     try:
         page = notion.pages.retrieve(page_id=page_id)
         properties = page.get("properties")

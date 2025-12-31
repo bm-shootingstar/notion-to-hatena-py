@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
 )
 
 from src.controllers.main_controller import process_notion_to_hatena
+from src.utils.errors import NotionAPIKeyError, NotionPageIDError
 
 
 class WorkerThread(QThread):
@@ -28,9 +29,17 @@ class WorkerThread(QThread):
     def run(self):
         try:
             process_notion_to_hatena(self.url_or_id, self.publish)
-            self.finished_signal.emit("Successfully posted to Hatena Blog!")
-        except Exception as e:
+            self.finished_signal.emit("はてなブログへの投稿が成功しました！")
+        except NotionAPIKeyError as e:
             self.error_signal.emit(str(e))
+        except NotionPageIDError as e:
+            self.error_signal.emit(str(e))
+        except ValueError as e:
+            # main_controller.pyで発生する不正なNotion ID/URLに関するエラー
+            self.error_signal.emit(f"入力エラー: {e}")
+        except Exception as e:
+            self.error_signal.emit(f"予期せぬエラーが発生しました: {e}")
+
 
 
 class MainWindow(QMainWindow):

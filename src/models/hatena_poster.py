@@ -6,9 +6,10 @@ from datetime import datetime, timezone
 from xml.etree import ElementTree
 
 import requests
-from dotenv import load_dotenv
 
-load_dotenv()
+from src.utils.env_loader import load_env
+
+load_env()
 
 logger = logging.getLogger(__name__)
 

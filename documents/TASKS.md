@@ -47,6 +47,8 @@
   - [x] URL/ID入力フィールドの実装
   - [x] 公開設定チェックボックスの実装
   - [x] 実行ボタンとバックグラウンド処理の実装
+  - [x] エラー発生時の詳細表示機能を追加
+
 - [x] GUIレイアウト修正
   - [x] 縦方向のサイズを適切に調整（上詰め、または固定）
 - [x] MVCリファクタリング
@@ -55,5 +57,9 @@
   - [x] `gui_app.py` を View 層へ移動
   - [x] ビジネスロジック (`actions.py`) を Controller/Service 層へ統合
   - [x] `main.py` の修正
+- [x] スタンドアロンアプリ対応
+  - [x] `pyproject.toml` に `pyinstaller` を追加
+  - [x] `.env` 読み込みロジックの確認と対応 (`env_loader.py`)
+  - [x] `notion_to_hatena.spec` ファイルの作成
 
 ## 今後の予定

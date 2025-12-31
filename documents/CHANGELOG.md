@@ -5,11 +5,17 @@
 - **機能追加**
   - PySide6を使用したGUIモードを追加。引数なしで `main.py` を実行すると起動する。
   - GUIにNotion URL/ID入力、公開設定チェックボックス、実行ボタンを実装。
+  - Notion APIキーが設定されていない場合、またはNotionページID/URLが不正な場合に、GUI上で詳細なエラーメッセージをダイアログ表示するように改善。
+  - エラーハンドリングのため、カスタム例外（`NotionAPIKeyError`, `NotionPageIDError`）を導入。
 - **リファクタリング**
   - MVCアーキテクチャへの移行を実施。`src/models`, `src/views`, `src/controllers` にディレクトリを分割。
   - `src/gui_app.py` のレイアウトを修正し、ウィンドウサイズを固定化。
+  - `notion_fetcher.py` と `main_controller.py` のエラー処理を、`sys.exit()` からカスタム例外をraiseする形式に変更。
 - **プロジェクト管理**
   - `GEMINI.md` を更新し、日本語での応答およびコメント作成に関するルールを追加。
+- **配布**
+  - PyInstaller を導入し、スタンドアロン実行ファイルを生成するための `notion_to_hatena.spec` を作成。
+  - `.env` ファイルを実行ファイルと同じディレクトリに配置することで動作するように環境変数読み込みロジックを確認。
 
 ## 2025-08-19
 
