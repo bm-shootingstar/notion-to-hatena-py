@@ -31,12 +31,9 @@
   - [x] `SPECIFICATION.md` を作成
   - [x] `CHANGELOG.md` を作成
   - [x] `README.md` を作成
-  - [x] `README.md` に Notion トークン取得方法を追記
-  - [x] `README.md` に公開オプションについて追記
-  - [x] `README.md` にコールアウトの絵文字リストを追記
-  - [x] `README.md` にライセンス情報を追記
-  - [x] ドキュメントを `documents` フォルダに移動
-  - [x] MITライセンスファイルを追加
+  - [x] `README.md` を最新の構成（MVC, GUI, exe）に合わせて大幅更新
+  - [x] `README.md` に exe ファイルの利用手順を追記
+
 - [x] Linter
   - [x] `ruff` を導入
   - [x] `ruff` のルールに合わせてコードを修正
@@ -61,5 +58,7 @@
   - [x] `pyproject.toml` に `pyinstaller` を追加
   - [x] `.env` 読み込みロジックの確認と対応 (`env_loader.py`)
   - [x] `notion_to_hatena.spec` ファイルの作成
+  - [x] ビルド済み実行ファイル (`notion-to-hatena.exe`) を `dist` ディレクトリに追加
+
 
 ## 今後の予定
