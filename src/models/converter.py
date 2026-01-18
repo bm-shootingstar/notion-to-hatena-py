@@ -1,6 +1,27 @@
 from src.models.hatena_poster import upload_image_to_hatena_photolife
 
 
+def _rich_texts_to_markdown(rich_texts: list) -> str:
+    line_parts = []
+    for rich_text in rich_texts:
+        text_content = rich_text.get("plain_text", "")
+        link_info = rich_text.get("href")
+
+        if link_info:
+            if text_content == link_info:
+                line_parts.append(link_info)
+            else:
+                line_parts.append(f"[{link_info}:title={text_content}]")
+        else:
+            line_parts.append(text_content)
+
+    return "".join(line_parts)
+
+
+def _rich_texts_to_plain_text(rich_texts: list) -> str:
+    return "".join([t.get("plain_text", "") for t in rich_texts])
+
+
 def convert_to_markdown(blocks: list) -> str:
     """
     Converts a list of Notion blocks to a Markdown string.
@@ -16,46 +37,33 @@ def convert_to_markdown(blocks: list) -> str:
         block_type = block.get("type")
 
         if block_type == "heading_1":
-            text = block["heading_1"]["rich_text"][0]["plain_text"]
+            text = _rich_texts_to_markdown(block["heading_1"].get("rich_text", []))
             markdown_lines.append(f"# {text}")
         elif block_type == "heading_2":
-            text = block["heading_2"]["rich_text"][0]["plain_text"]
+            text = _rich_texts_to_markdown(block["heading_2"].get("rich_text", []))
             markdown_lines.append(f"## {text}")
         elif block_type == "heading_3":
-            text = block["heading_3"]["rich_text"][0]["plain_text"]
+            text = _rich_texts_to_markdown(block["heading_3"].get("rich_text", []))
             markdown_lines.append(f"### {text}")
         elif block_type == "paragraph":
-            line_parts = []
-            for rich_text in block["paragraph"]["rich_text"]:
-                text_content = rich_text["plain_text"]
-                link_info = rich_text.get("href")
-
-                if link_info:
-                    if text_content == link_info:
-                        line_parts.append(link_info)
-                    else:
-                        line_parts.append(f"[{link_info}:title={text_content}]")
-                else:
-                    line_parts.append(text_content)
-
-            full_line = "".join(line_parts)
+            full_line = _rich_texts_to_markdown(block["paragraph"].get("rich_text", []))
 
             # Handle multi-line paragraphs by adding markdown line breaks
             processed_line = "  \n".join(full_line.split("\n"))
             markdown_lines.append(processed_line)
 
         elif block_type == "bulleted_list_item":
-            text = block["bulleted_list_item"]["rich_text"][0]["plain_text"]
+            text = _rich_texts_to_markdown(block["bulleted_list_item"].get("rich_text", []))
             markdown_lines.append(f"- {text}")
         elif block_type == "numbered_list_item":
-            text = block["numbered_list_item"]["rich_text"][0]["plain_text"]
+            text = _rich_texts_to_markdown(block["numbered_list_item"].get("rich_text", []))
             markdown_lines.append(f"1. {text}")
         elif block_type == "code":
-            text = block["code"]["rich_text"][0]["plain_text"]
+            text = _rich_texts_to_plain_text(block["code"].get("rich_text", []))
             language = block["code"]["language"]
             markdown_lines.append(f'```"{language}"\n{text}\n```')
         elif block_type == "quote":
-            text = block["quote"]["rich_text"][0]["plain_text"]
+            text = _rich_texts_to_markdown(block["quote"].get("rich_text", []))
             markdown_lines.append(f"> {text}")
         elif block_type == "image":
             notion_image_url = block["image"]["file"]["url"]
@@ -71,7 +79,7 @@ def convert_to_markdown(blocks: list) -> str:
                 markdown_lines.append(f"[{url}:embed]")
         elif block_type == "callout":
             icon_emoji = block.get("callout", {}).get("icon", {}).get("emoji", "📣")
-            text = "".join([t["plain_text"] for t in block["callout"]["rich_text"]])
+            text = _rich_texts_to_markdown(block["callout"].get("rich_text", []))
 
             emoji_to_class = {
                 "💡": "callout-info",
@@ -99,7 +107,7 @@ def convert_to_markdown(blocks: list) -> str:
                 header_row = table_rows[0]
                 html_table += "<thead><tr>"
                 for cell in header_row.get("table_row", {}).get("cells", []):
-                    cell_text = "".join([t.get("plain_text", "") for t in cell])
+                    cell_text = _rich_texts_to_markdown(cell)
                     html_table += f"<th>{cell_text}</th>"
                 html_table += "</tr></thead>"
                 table_rows = table_rows[1:]  # Remove header row
@@ -108,7 +116,7 @@ def convert_to_markdown(blocks: list) -> str:
             for row in table_rows:
                 html_table += "<tr>"
                 for cell in row.get("table_row", {}).get("cells", []):
-                    cell_text = "".join([t.get("plain_text", "") for t in cell])
+                    cell_text = _rich_texts_to_markdown(cell)
                     html_table += f"<td>{cell_text}</td>"
                 html_table += "</tr>"
             html_table += "</tbody></table>"
